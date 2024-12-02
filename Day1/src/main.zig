@@ -1,30 +1,32 @@
 const std = @import("std");
 
+const Tuple = std.meta.Tuple;
+const ListsTuple = Tuple(&.{ std.ArrayList(i32), std.ArrayList(i32) });
+const Allocator = std.mem.Allocator;
+
+const ArrayList = std.ArrayList;
+
 fn cmpByValue(context: void, a: i32, b: i32) bool {
     return std.sort.asc(i32)(context, a, b);
 }
 
-pub fn part1() !void {
-    const stdout_file = std.io.getStdOut().writer();
-    var bw = std.io.bufferedWriter(stdout_file);
-    const stdout = bw.writer();
+fn getLists(allocator: Allocator) !ListsTuple {
+    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+    defer arena.deinit();
+    const alloc = arena.allocator();
 
-    try stdout.print("Running part1... \n", .{});
+    std.log.info("cwd: {s}", .{
+        try std.fs.cwd().realpathAlloc(alloc, "."),
+    });
 
-    var file = try std.fs.cwd().openFile("input.txt", .{});
+    var file = try std.fs.cwd().openFile("input_example.txt", .{});
     defer file.close();
 
     var buf_reader = std.io.bufferedReader(file.reader());
     var in_stream = buf_reader.reader();
 
-    const ArrayList = std.ArrayList;
-    const allocator = std.heap.page_allocator;
-
     var left_list = ArrayList(i32).init(allocator);
     var right_list = ArrayList(i32).init(allocator);
-
-    defer left_list.deinit();
-    defer right_list.deinit();
 
     var buf: [1024]u8 = undefined;
     while (try in_stream.readUntilDelimiterOrEof(&buf, '\n')) |line| {
@@ -45,7 +47,22 @@ pub fn part1() !void {
         }
     }
 
+    return .{ left_list, right_list };
+}
+
+pub fn part1() !void {
     var total: i32 = 0;
+
+    const stdout_file = std.io.getStdOut().writer();
+    var bw = std.io.bufferedWriter(stdout_file);
+    const stdout = bw.writer();
+
+    const allocator = std.heap.page_allocator;
+
+    try stdout.print("Running part1... \n", .{});
+    const lists = try getLists(allocator);
+    const left_list = lists[0];
+    const right_list = lists[1];
 
     std.mem.sort(i32, left_list.items, {}, cmpByValue);
     std.mem.sort(i32, right_list.items, {}, cmpByValue);
@@ -71,7 +88,6 @@ pub fn part2() !void {
     var buf_reader = std.io.bufferedReader(file.reader());
     var in_stream = buf_reader.reader();
 
-    const ArrayList = std.ArrayList;
     const allocator = std.heap.page_allocator;
 
     var left_list = ArrayList(i32).init(allocator);
