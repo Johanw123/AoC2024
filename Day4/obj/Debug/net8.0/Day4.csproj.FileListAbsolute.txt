@@ -1,0 +1,15 @@
+D:\Dev\AoC2024\Day4\bin\Debug\net8.0\Day4.exe
+D:\Dev\AoC2024\Day4\bin\Debug\net8.0\Day4.deps.json
+D:\Dev\AoC2024\Day4\bin\Debug\net8.0\Day4.runtimeconfig.json
+D:\Dev\AoC2024\Day4\bin\Debug\net8.0\Day4.dll
+D:\Dev\AoC2024\Day4\bin\Debug\net8.0\Day4.pdb
+D:\Dev\AoC2024\Day4\obj\Debug\net8.0\Day4.GeneratedMSBuildEditorConfig.editorconfig
+D:\Dev\AoC2024\Day4\obj\Debug\net8.0\Day4.AssemblyInfoInputs.cache
+D:\Dev\AoC2024\Day4\obj\Debug\net8.0\Day4.AssemblyInfo.cs
+D:\Dev\AoC2024\Day4\obj\Debug\net8.0\Day4.csproj.CoreCompileInputs.cache
+D:\Dev\AoC2024\Day4\obj\Debug\net8.0\Day4.sourcelink.json
+D:\Dev\AoC2024\Day4\obj\Debug\net8.0\Day4.dll
+D:\Dev\AoC2024\Day4\obj\Debug\net8.0\refint\Day4.dll
+D:\Dev\AoC2024\Day4\obj\Debug\net8.0\Day4.pdb
+D:\Dev\AoC2024\Day4\obj\Debug\net8.0\Day4.genruntimeconfig.cache
+D:\Dev\AoC2024\Day4\obj\Debug\net8.0\ref\Day4.dll
