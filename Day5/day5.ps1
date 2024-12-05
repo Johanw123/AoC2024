@@ -1,10 +1,6 @@
-
-
 $lines = Get-Content -Path .\input.txt
 $list = New-Object Collections.Generic.List[String]
 $list_correct = New-Object Collections.Generic.List[String]
-
-#[array]::Reverse($lines)
 
 foreach ($line in $lines)
 {
@@ -28,18 +24,17 @@ while($loop)
 
       for($i = 0; $i -lt $list.Count; $i++)
       {
-        $update = $list[$i]
-        $a = $update.Contains($pre)
-        $b = $update.Contains($post)
+        $a = $list[$i].Contains($pre)
+        $b = $list[$i].Contains($post)
 
-        if($a -and $b -and $update.IndexOf($pre) -gt $update.IndexOf($post))
+        if($a -and $b -and $list[$i].IndexOf($pre) -gt $list[$i].IndexOf($post))
         {
+          $list_correct.Remove($list[$i])
+
           $list[$i] = $list[$i].Replace($post, "post")
           $list[$i] = $list[$i].Replace($pre, "pre")
           $list[$i] = $list[$i].Replace("pre", $post)
           $list[$i] = $list[$i].Replace("post", $pre)
-
-          $list_correct.Remove($update)
 
           $loop = $true
         }
