@@ -1,52 +1,67 @@
-$result = get-content .\input_example.txt
+function Test([uint64]$sum, $operator, $values, $curIndex, $target, [ref]$found)
+{
+  if($found.Value -eq $true)
+  {
+    return
+  }
 
+  if($sum -gt $target)
+  {
+    return
+  }
+
+  if($curIndex -eq $values.Count)
+  {
+    if($sum -eq $target)
+    {
+      $found.Value = $true
+    }
+    return
+  }
+
+
+  [uint64]$curValue = [uint64]::Parse($values[$curIndex])
+  $curValueString = $values[$curIndex]
+  $sumString = $sum.ToString()
+  $curIndex++
+
+  if($operator -eq '+')
+  {
+    Test ($sum + $curValue) '+' $values $curIndex $target $found
+    Test ($sum + $curValue) '*' $values $curIndex $target $found
+    Test ($sum + $curValue) 'c' $values $curIndex $target $found
+  } elseif($operator -eq '*')
+  {
+
+    Test ($sum * $curValue) '+' $values $curIndex $target $found
+    Test ($sum * $curValue) '*' $values $curIndex $target $found
+    Test ($sum * $curValue) 'c' $values $curIndex $target $found
+  } else
+  {
+    $newSum = $sumString + $curValueString
+    Test ([uint64]::Parse($newSum)) '+' $values $curIndex $target $found
+    Test ([uint64]::Parse($newSum)) '*' $values $curIndex $target $found
+    Test ([uint64]::Parse($newSum)) 'c' $values $curIndex $target $found
+  }
+}
+
+$result = get-content .\input.txt
+
+$totalSum = 0
 foreach ($line in $result)
 {
   $targetResult = $line.Split(':')[0]
   $values = $line.Split(':')[1]
 
   $split = $values.Split(' ', [System.StringSplitOptions]::RemoveEmptyEntries)
+  
+  $found = $false
+  Test 0 '+' $split 0 $targetResult ([ref]$found)
 
-  $numOperators = $split.Count - 1
-  $operators = New-Object bool[][] ($numOperators, ($numOperators * $numOperators))
-  Write-Host($operators.Count)
-
-  # T T
-  # F F
-  # T F
-  # F T
-
-  # T T T
-  # F F F
-  # T F T
-  # F T F
-  # T T F
-  # F F T
-  # T F F
-  # F T T
-
-  for($i = 0; $i -lt $numOperators; $i++)
+  if($found -eq $true)
   {
-    for($j = 0; $j -lt ($numOperators * $numOperators) ; $j++)
-    {
-      $operators[$i][$j] = ($j * $i + $j) % 2 -eq 0 
-    }
+    $totalSum += $targetResult
   }
-
-
-  foreach($operator in $operators)
-  {
-    #Write-Host($operator)
-  }
-
-  # foreach($outer in $values.Split(' '))
-  # {
-  #   foreach($inner in $values.Split(' '))
-  #   {
-  #     if($inner -ne $outer)
-  #     {
-  #        
-  #     }
-  #   }
 }
 
+Write-Host($totalSum)
